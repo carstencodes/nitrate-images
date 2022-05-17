@@ -101,6 +101,7 @@ RUN apk add --no-cache --virtual build-deps \
           py3-wheel=${PYWHEEL_VERSION} \
           py3-pip=${PYPIP_VERSION} \
           krb5-dev=${KRB_VERSION} \
+  && apk add --no-cache krb5-libs=${KRB_VERSION} \
   && pip install --no-cache-dir \
           gunicorn==${GUNICORN_VERSION} \
           "nitrate-tcms[krbauth,socialauth]"==${NITRATE_VERSION} \
