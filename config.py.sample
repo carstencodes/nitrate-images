@@ -1,0 +1,49 @@
+#
+# Copyright (c) 2022 Carsten Igel.
+#
+# This file is part of Nitrate Alpine Docker Images With Social-Auth 
+# (see https://github.com/carstencodes/nitrate-images).
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+from tcms.settings.product import *
+
+from os import getenv
+
+def getenv_ensured(key) -> str:
+    value: str = getenv(key)
+    if value is None:
+        raise ValueError(f"'{key}' is not set.")
+    
+    return value
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = getenv_ensured("NITRATE_SECRET")
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
+
+_backend = getenv("NITRATE_DB_BACKEND", "pgsql")
+# Database settings
+DATABASES = {
+    'default': {
+        'ENGINE': f"django.db.backends.{_backend}",
+        'NAME': getenv_ensured("NITRATE_DB_HOST"),
+        'HOST': getenv_ensured("POSTGRES_HOST"),
+        'USER': getenv_ensured("POSTGRES_USER"),
+        'PASSWORD': getenv_ensured("POSTGRES_PASS"),
+    },
+}
+# Nitrate defines a 'slave_1' connection
+DATABASES['slave_1'] = DATABASES['default']

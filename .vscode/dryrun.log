@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/carsten/dev/docker/nitrate'
+make: Leaving directory '/home/carsten/dev/docker/nitrate'
+ 
+make: *** No targets.  Stop.
+
