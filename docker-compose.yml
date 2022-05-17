@@ -57,6 +57,8 @@ services:
       - production.env
     networks:
       - nitrate
+    depends_on:
+      - messagebus
     deploy:
       mode: replicated
       replicas: 1 # container name will be set automatically using <project.name>_<service.name>_<replica.index>
@@ -77,7 +79,6 @@ services:
       - public
     depends_on:
       - db
-      - migrate
 
   migrate:
     <<: *nitrate-volumes
