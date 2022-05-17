@@ -23,6 +23,8 @@ from os import getenv
 from time import sleep
 
 from django import setup
+setup()
+
 from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.db import connection
@@ -66,7 +68,6 @@ def initialize_db() -> None:
 def set_default_permissions() -> None:
     call_command('setdefaultperms')
 
-setup()
 wait_for_db()
 initialize_db()
 set_default_permissions()
