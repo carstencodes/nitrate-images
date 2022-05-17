@@ -34,6 +34,8 @@ ARG PYPIP_VERSION=20.3.4-r1
 ARG LIBPQ_VERSION=14.3-r0
 ARG MARIADB_CONN_VERSION=3.1.13-r2
 ARG SIX_VERSION=1.16.0
+ARG PY3_SIX_VERSION=1.16.0-r0
+ARG PY3_SETUPTOOLS_VERSION=52.0.0-r4
 
 RUN mkdir -p /home/nitrate /opt/nitrate \
   && addgroup -S nitrate \
@@ -42,7 +44,9 @@ RUN mkdir -p /home/nitrate /opt/nitrate \
   && apk add --no-cache \
                 python3=${PYTHON_VERSION} \
                 libpq=${LIBPQ_VERSION} \
-                mariadb-connector-c=${MARIADB_CONN_VERSION}
+                mariadb-connector-c=${MARIADB_CONN_VERSION} \
+                py3-six=${PY3_SIX_VERSION} \
+                py3-setuptools=${PY3_SETUPTOOLS_VERSION}
 
 COPY --chown=nitrate:nitrate app/*.py /opt/nitrate/
 
@@ -57,7 +61,6 @@ RUN apk add --no-cache --virtual build-deps \
         py3-wheel=${PYWHEEL_VERSION} \
         py3-pip=${PYPIP_VERSION} \
   && pip install --no-cache-dir \
-        six==${SIX_VERSION} \
         "nitrate-tcms[mysql,pgsql]"==${NITRATE_VERSION} \
   && apk del build-deps
 
