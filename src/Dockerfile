@@ -112,7 +112,7 @@ USER nitrate:nitrate
 EXPOSE 8000
 
 #TODO Add config file
-ENTRYPOINT [ "/usr/bin/gunicorn", "--bind", "0.0.0.0", "--port", "8000", "nitrate.wsgi:application" ]
+ENTRYPOINT [ "/usr/bin/gunicorn", "--bind", "0.0.0.0:8000", "nitrate.wsgi:application" ]
 
 FROM nitrate as migrate
 
