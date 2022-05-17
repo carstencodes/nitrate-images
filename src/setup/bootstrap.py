@@ -21,6 +21,7 @@
 
 from os import getenv
 from time import sleep
+from typing import Optional
 
 from django import setup
 setup()
@@ -29,14 +30,14 @@ from django.contrib.auth.models import User
 from django.core.management import call_command
 from django.db import connection
 
-def createSuperUser(username: str, 
+def create_super_user(username: str, 
                     password: str, 
-                    email: str | None = "", 
-                    firstName: str | None = "", 
-                    lastName: str | None = "") -> User:
-    invalidInputs = ["", None]
+                    email: Optional[str] = "", 
+                    firstName: Optional[str] = "", 
+                    lastName: Optional[str] = "") -> Optional[User]:
+    invalidInputs = [None]
 
-    if username.strip() in invalidInputs or password.strip() in invalidInputs:
+    if username is None or username.strip() in invalidInputs or password is None or password.strip() in invalidInputs:
         return None
 
     user = User(
