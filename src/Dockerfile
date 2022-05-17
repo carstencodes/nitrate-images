@@ -145,6 +145,7 @@ ARG CARGO_VERSION=1.56.1-r0
 ARG PYWHEEL_VERSION=0.36.2-r2
 ARG PYPIP_VERSION=20.3.4-r1
 ARG KRB_VERSION=1.19.3-r0
+ARG REDIS_VERSION=4.3.1
 
 USER root:root
 
@@ -159,6 +160,7 @@ RUN apk add --no-cache --virtual build-deps \
           krb5-dev=${KRB_VERSION} \
   && pip install --no-cache-dir \
           "nitrate-tcms[async]"==${NITRATE_VERSION} \
+          redis==${REDIS_VERSION} \
   && apk del build-deps
 
 USER nitrate:nitrate
