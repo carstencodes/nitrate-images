@@ -48,7 +48,7 @@ services:
 
   worker:
     <<: *nitrate-volumes
-    image: carstencodes/nitrate/worker:${NITRATE_VERSION}-py3.10-alpine3.16
+    image: carstencodes/nitrate/worker:${NITRATE_VERSION}-py${PYTHON_VERSION}-alpine${ALPINE_VERSION}
     restart: unless-stopped
     profiles:
       - production
@@ -65,7 +65,7 @@ services:
   
   web:
     <<: *nitrate-volumes
-    image: carstencodes/nitrate/web:${NITRATE_VERSION}-py3.10-alpine3.16
+    image: carstencodes/nitrate/web:${NITRATE_VERSION}-py${PYTHON_VERSION}-alpine${ALPINE_VERSION}
     restart: unless-stopped
     profiles:
       - production
@@ -82,7 +82,7 @@ services:
 
   migrate:
     <<: *nitrate-volumes
-    image: carstencodes/nitrate/migrate:${NITRATE_VERSION}-py3.10-alpine3.16
+    image: carstencodes/nitrate/migrate:${NITRATE_VERSION}-py${PYTHON_VERSION}-alpine${ALPINE_VERSION}
     restart: "no"
     profiles:
       - migration
@@ -96,7 +96,7 @@ services:
 
   setup:
     <<: *nitrate-volumes
-    image: carstencodes/nitrate/setup:${NITRATE_VERSION}-py3.10-alpine3.16
+    image: carstencodes/nitrate/setup:${NITRATE_VERSION}-py${PYTHON_VERSION}-alpine${ALPINE_VERSION}
     restart: "no"
     profiles:
       - setup
