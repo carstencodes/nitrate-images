@@ -32,28 +32,28 @@ layers:
 	docker build ./src/
 
 worker: layers
-	docker build -t $(REPOSITORY)/worker:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target worker ./src/
+	docker build -t $(REPOSITORY)-worker:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target worker ./src/
 
 web: layers
-	docker build -t $(REPOSITORY)/web:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target web ./src/
+	docker build -t $(REPOSITORY)-web:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target web ./src/
 
 migrate: layers
-	docker build -t $(REPOSITORY)/migrate:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target migrate ./src/
+	docker build -t $(REPOSITORY)-migrate:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target migrate ./src/
 
 setup: layers
-	docker build -t $(REPOSITORY)/setup:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target setup ./src/
+	docker build -t $(REPOSITORY)-setup:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target setup ./src/
 
 all: web migrate setup worker
 
 latest: all
-	docker tag $(REPOSITORY)/setup:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/setup:$(NITRATE_MAJOR_VERSION)-alpine
-	docker tag $(REPOSITORY)/setup:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/setup:latest
+	docker tag $(REPOSITORY)-setup:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)-setup:$(NITRATE_MAJOR_VERSION)-alpine
+	docker tag $(REPOSITORY)-setup:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)-setup:latest
 
-	docker tag $(REPOSITORY)/migrate:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/migrate:$(NITRATE_MAJOR_VERSION)-alpine
-	docker tag $(REPOSITORY)/migrate:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/migrate:latest
+	docker tag $(REPOSITORY)-migrate:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)-migrate:$(NITRATE_MAJOR_VERSION)-alpine
+	docker tag $(REPOSITORY)-migrate:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)-migrate:latest
 
-	docker tag $(REPOSITORY)/web:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/web:$(NITRATE_MAJOR_VERSION)-alpine
-	docker tag $(REPOSITORY)/web:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/web:latest
+	docker tag $(REPOSITORY)-web:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)-web:$(NITRATE_MAJOR_VERSION)-alpine
+	docker tag $(REPOSITORY)-web:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)-web:latest
 
-	docker tag $(REPOSITORY)/worker:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/worker:$(NITRATE_MAJOR_VERSION)-alpine
-	docker tag $(REPOSITORY)/worker:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/worker:latest
+	docker tag $(REPOSITORY)-worker:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)-worker:$(NITRATE_MAJOR_VERSION)-alpine
+	docker tag $(REPOSITORY)-worker:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)-worker:latest

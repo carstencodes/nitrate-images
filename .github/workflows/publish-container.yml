@@ -51,7 +51,7 @@ jobs:
           context: src
           target: ${{ matrix.target }}
           push: true
-          tags: carstencodes/nitrate/${{ matrix.target }}:4.12-py3.10-alpine3.16
+          tags: carstencodes/nitrate-${{ matrix.target }}:4.12-py3.10-alpine3.16
       -
         name: Build and push images - web (short)
         uses: docker/build-push-action@v2
@@ -60,7 +60,7 @@ jobs:
           context: src
           target: ${{ matrix.target }}
           push: true
-          tags: carstencodes/nitrate/${{ matrix.target }}:4-alpine
+          tags: carstencodes/nitrate-${{ matrix.target }}:4-alpine
       -
         name: Build and push images
         uses: docker/build-push-action@v2
@@ -69,5 +69,5 @@ jobs:
           context: src
           target: ${{ matrix.target }}
           push: true
-          tags: carstencodes/nitrate/${{ matrix.target }}:latest
+          tags: carstencodes/nitrate-${{ matrix.target }}:latest
 
