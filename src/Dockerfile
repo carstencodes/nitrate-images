@@ -105,6 +105,14 @@ RUN apk add --no-cache --virtual build-deps \
   && pip install --no-cache-dir \
           gunicorn==${GUNICORN_VERSION} \
           "nitrate-tcms[krbauth,socialauth]"==${NITRATE_VERSION} \
+  && cd /tmp \
+        && pip download --no-deps nitrate-tcms==${NITRATE_VERSION} \
+        && mkdir -p /usr/share/nitrate/templates /usr/share/nitrate/static /var/www \
+        && tar -zxvf nitrate-tcms-${NITRATE_VERSION}.tar.gz -C /usr/share/nitrate/templates --strip-components=3 nitrate-tcms-${NITRATE_VERSION}/src/templates/ \
+        && tar -zxvf nitrate-tcms-${NITRATE_VERSION}.tar.gz -C /usr/share/nitrate/static --strip-components=3 nitrate-tcms-${NITRATE_VERSION}/src/static/ \
+        && chown -Rv nitrate:nitrate /usr/share/nitrate \
+        && rm -vf nitrate-tcms-${NITRATE_VERSION}.tar.gz \
+        && cd - > /dev/null \
   && apk del build-deps
 
 USER nitrate:nitrate
