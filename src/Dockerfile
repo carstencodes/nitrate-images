@@ -99,6 +99,7 @@ ARG WHITE_NOISE_VERSION=6.2.0
 
 USER root:root
 
+# hadolint disable=DL3003
 RUN apk add --no-cache --virtual build-deps \
           openssl-dev=${OPENSSL_VERSION} \
           python3-dev=${PYTHON_VERSION} \
