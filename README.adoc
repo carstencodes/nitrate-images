@@ -1,0 +1,134 @@
+= Nitrate Docker Images
+
+:toc:
+
+This repository contains sources to build images for the link:https://github.com/Nitrate/Nitrate[Nitrate] Test Case Management System.
+
+In contrast to the official images provided by the Nitrate authors this repository uses a different approach:
+
+* All images are based on link:https://alpinelinux.com[Alpine linux]
+* Installation takes place using pure python pip
+* A special WSGI Middleware (link:https://whitenoise.evans.io/en/stable/index.html[WhiteNoise]) is used to serve the static files
+* The link:https://python-social-auth.readthedocs.io/en/latest/[Python Social Auth Backend] is installed to provide a federated login.
+* The images are separated into four image parts (rather than 2 on the original item):
+** Worker: The celery worker
+** Web: The django app
+** Migrate: The database migration for applying updates
+** Setup: Create the initial database and application
+
+It uses postgres by default.
+
+== Configuration
+
+* Copy or download the link:docker-compose.yml[docker-compose.yml] from this repository.
+* Create the files `.env`, `db.env`, `production.env` and `setup.env`
+* Create the `config.py` file.
+
+The files should look like this:
+
+=== `.env`
+
+[source,language=shell]
+----
+NITRATE_VERSION=4.12
+POSTGRES_VERSION=14
+PYTHON_VERSION=3.10
+ALPINE_VERSION=3.16
+----
+
+This will configure docker-compose to replace the variables in the compose file.
+
+=== `db.env`
+
+This file will contain the configuration for the database and will be passed to the database configuration.
+
+[source,language=shell]
+----
+include::db.env.sample[]
+----
+
+=== `production.env`
+
+This will configure the worker and the web server and passed to the corresponding containers.
+
+[source,language=shell]
+----
+include::production.env.sample[]
+----
+
+=== `setup.env`
+
+This will configure the initial configuration of the system.
+
+[source,language=shell]
+----
+include::setup.env.sample[]
+----
+
+=== `config.py`
+
+The django configuration file.
+
+It should contain the configuration for link:https://docs.djangoproject.com/en/4.1/ref/settings/[django], link:https://nitrate.readthedocs.io/en/latest/configuration.html[Nitrate] and link:https://python-social-auth.readthedocs.io/en/latest/configuration/index.html[Python social auth].
+
+The sample file should provide a good hint how the file can be structured:
+
+[source,language=python]
+----
+include::config.py.sample[lines=20..-1]
+----
+
+== Installation
+
+After all the files are in place, run the following commands:
+
+[source,language=shell]
+----
+$ docker-compose pull <1>
+...
+$ docker-compose up -d <2>
+...
+$ docker-compose --profile setup up -d <3>
+...
+$ docker-compose down --remove-orphans <4>
+----
+
+<1> Pull the images
+<2> Start the database container in background
+<3> Start the initial setup
+<4> Stop the composed containers
+
+== Operating
+
+After the setup, the service can be started.
+
+[source,languange=shell]
+----
+$ docker-compose --profile production up -d
+...
+----
+
+This will start rabbitmq, celery workers django, etc. The server should now be available and operating.
+
+== Migration
+
+The migration can take place, if a new application version is available. Update the `.env` file accordingly. Check the release notes for any special operations. Create a backup of the database.
+
+[source,language=shell]
+----
+$ docker-compose down --remove-orphans. <1>
+...
+$ docker-compose pull
+...
+$ docker-compose --profile migration up -d <2>
+...
+$ docker-compose down --remove-orphans
+...
+$ docker-compose --profile production up -d
+...
+$ docker image prune <3>
+----
+
+<1> will shutdown the containers. 
+<2> The migration can take place using the migrate container
+<3> After the migration remove the old images
