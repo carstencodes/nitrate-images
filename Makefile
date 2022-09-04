@@ -18,6 +18,13 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 
+NITRATE_MAJOR_VERSION = 4
+NITRATE_MINOR_VERSION = 12
+NITRATE_VERSION = $(NITRATE_MAJOR_VERSION).$(NITRATE_MINOR_VERSION)
+PYTHON_VERSION = 3.10
+ALPINE_VERSION = 3.16
+REPOSITORY = carstencodes/nitrate
+
 .PHONY: layers all web worker migrate setup latest
 .DEFAULT: all
 
@@ -25,28 +32,28 @@ layers:
 	docker build ./src/
 
 worker: layers
-	docker build -t carstencodes/nitrate/worker:4.12-py3.9-alpine3.15 --target worker ./src/
+	docker build -t $(REPOSITORY)/worker:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target worker ./src/
 
 web: layers
-	docker build -t carstencodes/nitrate/web:4.12-py3.9-alpine3.15 --target web ./src/
+	docker build -t $(REPOSITORY)/web:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target web ./src/
 
 migrate: layers
-	docker build -t carstencodes/nitrate/migrate:4.12-py3.9-alpine3.15 --target migrate ./src/
+	docker build -t $(REPOSITORY)/migrate:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target migrate ./src/
 
 setup: layers
-	docker build -t carstencodes/nitrate/setup:4.12-py3.9-alpine3.15 --target setup ./src/
+	docker build -t $(REPOSITORY)/setup:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) --target setup ./src/
 
 all: web migrate setup worker
 
 latest: all
-	docker tag carstencodes/nitrate/setup:4.12-py3.9-alpine3.15 carstencodes/nitrate/setup:4-alpine
-	docker tag carstencodes/nitrate/setup:4.12-py3.9-alpine3.15 carstencodes/nitrate/setup:latest
+	docker tag $(REPOSITORY)/setup:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/setup:$(NITRATE_MAJOR_VERSION)-alpine
+	docker tag $(REPOSITORY)/setup:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/setup:latest
 
-	docker tag carstencodes/nitrate/migrate:4.12-py3.9-alpine3.15 carstencodes/nitrate/migrate:4-alpine
-	docker tag carstencodes/nitrate/migrate:4.12-py3.9-alpine3.15 carstencodes/nitrate/migrate:latest
+	docker tag $(REPOSITORY)/migrate:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/migrate:$(NITRATE_MAJOR_VERSION)-alpine
+	docker tag $(REPOSITORY)/migrate:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/migrate:latest
 
-	docker tag carstencodes/nitrate/web:4.12-py3.9-alpine3.15 carstencodes/nitrate/web:4-alpine
-	docker tag carstencodes/nitrate/web:4.12-py3.9-alpine3.15 carstencodes/nitrate/web:latest
+	docker tag $(REPOSITORY)/web:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/web:$(NITRATE_MAJOR_VERSION)-alpine
+	docker tag $(REPOSITORY)/web:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/web:latest
 
-	docker tag carstencodes/nitrate/worker:4.12-py3.9-alpine3.15 carstencodes/nitrate/worker:4-alpine
-	docker tag carstencodes/nitrate/worker:4.12-py3.9-alpine3.15 carstencodes/nitrate/worker:latest
+	docker tag $(REPOSITORY)/worker:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/worker:$(NITRATE_MAJOR_VERSION)-alpine
+	docker tag $(REPOSITORY)/worker:$(NITRATE_VERSION)-py$(PYTHON_VERSION)-alpine$(ALPINE_VERSION) $(REPOSITORY)/worker:latest
