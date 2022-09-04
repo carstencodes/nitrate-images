@@ -38,6 +38,7 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }}
       -
         name: Build all images with without pushing
+        uses: docker/build-push-action@v2
         if: ${{ github.ref_name != 'main' }}
         with:
           context: src
