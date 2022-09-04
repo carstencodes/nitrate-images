@@ -46,3 +46,4 @@ DATABASES = {
 # Nitrate defines a 'slave_1' connection
 DATABASES['slave_1'] = DATABASES['default']
 
+SECRET_KEY = getenv_ensured("NITRATE_SECRET_KEY")
