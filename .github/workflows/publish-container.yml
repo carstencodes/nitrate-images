@@ -1,0 +1,72 @@
+name: Publish containers
+
+on:
+  push:
+    branches:
+      - 'main'
+      - 'ci/test'
+  pull_request:
+    branches:
+      - 'main'
+
+jobs:
+  docker:
+    strategy:
+      matrix:
+        include:
+          - target: web
+          - target: worker
+          - target: migrate
+          - target: setup
+    runs-on: ubuntu-latest
+    name: Create docker containers
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USER_NAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      -
+        name: Build all images with without pushing
+        if: ${{ github.ref_name != 'main' }}
+        with:
+          context: src
+          push: false
+      -
+        name: Build and push images - web (full)
+        uses: docker/build-push-action@v2
+        if: ${{ github.ref_name == 'main' }}
+        with:
+          context: src
+          target: ${{ matrix.target }}
+          push: true
+          tags: carstencodes/nitrate/${{ matrix.target }}:4.12-py3.10-alpine3.16
+      -
+        name: Build and push images - web (short)
+        uses: docker/build-push-action@v2
+        if: ${{ github.ref_name == 'main' }}
+        with:
+          context: src
+          target: ${{ matrix.target }}
+          push: true
+          tags: carstencodes/nitrate/${{ matrix.target }}:4-alpine
+      -
+        name: Build and push images
+        uses: docker/build-push-action@v2
+        if: ${{ github.ref_name == 'main' }}
+        with:
+          context: src
+          target: ${{ matrix.target }}
+          push: true
+          tags: carstencodes/nitrate/${{ matrix.target }}:latest
+
