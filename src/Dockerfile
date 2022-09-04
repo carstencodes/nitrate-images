@@ -64,7 +64,7 @@ RUN apk add --no-cache --virtual build-deps \
         py3-wheel=${PYWHEEL_VERSION} \
         py3-pip=${PYPIP_VERSION} \
   && pip install --no-cache-dir \
-        "nitrate-tcms[mysql,pgsql]"==${NITRATE_VERSION} \
+        "nitrate-tcms[mysql,pgsql,krbauth,socialauth]"==${NITRATE_VERSION} \
         django-debug-toolbar==${DJANGO_DEBUG_TOOLBAR_VERSION} \
   && apk del build-deps
 
