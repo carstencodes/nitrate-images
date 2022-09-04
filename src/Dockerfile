@@ -34,8 +34,7 @@ ARG PYPIP_VERSION=20.3.4-r1
 ARG LIBPQ_VERSION=14.3-r0
 ARG MARIADB_CONN_VERSION=3.1.13-r2
 ARG SIX_VERSION=1.16.0
-ARG PY3_SIX_VERSION=1.16.0-r0
-ARG PY3_SETUPTOOLS_VERSION=52.0.0-r4
+ARG DJANGO_DEBUG_TOOLBAR_VERSION=3.6.0
 
 RUN mkdir -p /home/nitrate /opt/nitrate \
   && addgroup -S nitrate \
@@ -62,6 +61,7 @@ RUN apk add --no-cache --virtual build-deps \
         py3-pip=${PYPIP_VERSION} \
   && pip install --no-cache-dir \
         "nitrate-tcms[mysql,pgsql]"==${NITRATE_VERSION} \
+        django-debug-toolbar==${DJANGO_DEBUG_TOOLBAR_VERSION} \
   && apk del build-deps
 
 USER nitrate:nitrate
