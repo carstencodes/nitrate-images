@@ -17,11 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-from tcms.settings.product import *
-from nitrate import extras
 
-SECRET_KEY = "1234567890abcdef"
+MIDDLEWARE = ("whitenoise.middleware.WhiteNoiseMiddleware",) + MIDDLEWARE
 
-DEBUG = True
-
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

@@ -89,6 +89,7 @@ ARG CARGO_VERSION=1.56.1-r0
 ARG PYWHEEL_VERSION=0.36.2-r2
 ARG PYPIP_VERSION=20.3.4-r1
 ARG KRB_VERSION=1.19.3-r0
+ARG WHITE_NOISE_VERSION=6.2.0
 
 USER root:root
 
@@ -105,6 +106,7 @@ RUN apk add --no-cache --virtual build-deps \
   && pip install --no-cache-dir \
           gunicorn==${GUNICORN_VERSION} \
           "nitrate-tcms[krbauth,socialauth]"==${NITRATE_VERSION} \
+          WhiteNoise==${WHITE_NOISE_VERSION} \
   && cd /tmp \
         && pip download --no-deps nitrate-tcms==${NITRATE_VERSION} \
         && mkdir -p /usr/share/nitrate/templates /usr/share/nitrate/static /var/www \

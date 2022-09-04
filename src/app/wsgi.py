@@ -20,7 +20,11 @@
 import os
 
 from django.core.wsgi import get_wsgi_application
+from whitenoise import WhiteNoise
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nitrate_app.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "nitrate.settings")
 
 application = get_wsgi_application()
+application = WhiteNoise(application, root="/var/www")
+application.add_files("/usr/share/nitrate/static/", prefix="static/")
+
