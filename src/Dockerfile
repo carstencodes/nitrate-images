@@ -22,8 +22,10 @@ ARG ALPINE_VERSION=3.16
 FROM alpine:${ALPINE_VERSION} as nitrate
 
 ARG NITRATE_VERSION=4.12
+ARG PYTHON_LANG_VERSION=3.10
+ARG PYTHON_PACKAGE_VERSION=5-r0
 
-ARG PYTHON_VERSION=3.10.5-r0
+ARG PYTHON_VERSION=${PYTHON_LANG_VERSION}.${PYTHON_PACKAGE_VERSION}
 ARG OPENSSL_VERSION=1.1.1q-r0
 ARG PSQL_VERSION_MAJOR=14
 ARG PSQL_VERSION_TAIL=5-r0
@@ -52,6 +54,7 @@ RUN mkdir -p /home/nitrate /opt/nitrate \
                 py3-setuptools=${PY3_SETUPTOOLS_VERSION}
 
 COPY --chown=nitrate:nitrate app/*.py /opt/nitrate/
+COPY --chown=nitrate:nitrate patches/*.patch /opt/nitrate/patches/
 
 RUN apk add --no-cache --virtual build-deps \
         openssl-dev=${OPENSSL_VERSION} \
@@ -66,6 +69,10 @@ RUN apk add --no-cache --virtual build-deps \
   && pip install --no-cache-dir \
         "nitrate-tcms[mysql,pgsql,socialauth]"==${NITRATE_VERSION} \
         django-debug-toolbar==${DJANGO_DEBUG_TOOLBAR_VERSION} \
+  # Apply Patch for  https://github.com/Nitrate/Nitrate/issues/1095
+  && sed -i "51i if 'SOCIAL' in settings.ENABLED_AUTH_BACKENDS:" /usr/lib/python${PYTHON_LANG_VERSION}/site-packages/tcms/urls.py \
+  && sed -i "52i     urlpatterns += [ path('', include('social_django.urls', namespace='social')) ]" /usr/lib/python${PYTHON_LANG_VERSION}/site-packages/tcms/urls.py \
+  && sed -i "53i" /usr/lib/python${PYTHON_LANG_VERSION}/site-packages/tcms/urls.py \
   && apk del build-deps
 
 
