@@ -54,7 +54,6 @@ RUN mkdir -p /home/nitrate /opt/nitrate \
                 py3-setuptools=${PY3_SETUPTOOLS_VERSION}
 
 COPY --chown=nitrate:nitrate app/*.py /opt/nitrate/
-COPY --chown=nitrate:nitrate patches/*.patch /opt/nitrate/patches/
 
 RUN apk add --no-cache --virtual build-deps \
         openssl-dev=${OPENSSL_VERSION} \
