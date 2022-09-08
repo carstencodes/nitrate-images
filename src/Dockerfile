@@ -69,9 +69,7 @@ RUN apk add --no-cache --virtual build-deps \
         "nitrate-tcms[mysql,pgsql,socialauth]"==${NITRATE_VERSION} \
         django-debug-toolbar==${DJANGO_DEBUG_TOOLBAR_VERSION} \
   # Apply Patch for  https://github.com/Nitrate/Nitrate/issues/1095
-  && sed -i "51i if 'SOCIAL' in settings.ENABLED_AUTH_BACKENDS:" /usr/lib/python${PYTHON_LANG_VERSION}/site-packages/tcms/urls.py \
-  && sed -i "52i     urlpatterns += [ path('', include('social_django.urls', namespace='social')) ]" /usr/lib/python${PYTHON_LANG_VERSION}/site-packages/tcms/urls.py \
-  && sed -i "53i" /usr/lib/python${PYTHON_LANG_VERSION}/site-packages/tcms/urls.py \
+  && sed -i "51i if 'SOCIAL' in settings.ENABLED_AUTH_BACKENDS:\    urlpatterns += [ path('', include('social_django.urls', namespace='social')) ]\ " /usr/lib/python${PYTHON_LANG_VERSION}/site-packages/tcms/urls.py \
   && apk del build-deps
 
 
